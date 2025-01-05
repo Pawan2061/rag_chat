@@ -8,10 +8,10 @@ import {
   RunnableSequence,
 } from "@langchain/core/runnables";
 import { combineDocs } from "./combine";
+import { model } from "./model";
 import { retriever } from "./retriever";
 
 const openAIApiKey: string = process.env.OPENAI_API_KEY || "";
-const llm = new ChatOpenAI({ openAIApiKey, temperature: 0, streaming: true });
 
 const standaloneQuestionTemplate = `Given  question, convert the question to a standalone question. 
 
@@ -30,7 +30,7 @@ answer: `;
 const answerPrompt = PromptTemplate.fromTemplate(answerTemplate);
 
 const standaloneQuestionChain = standaloneQuestionPrompt
-  .pipe(llm)
+  .pipe(model)
   .pipe(new StringOutputParser());
 
 const retrieverChain = RunnableSequence.from([
@@ -39,7 +39,7 @@ const retrieverChain = RunnableSequence.from([
   combineDocs,
 ]);
 
-const answerChain = answerPrompt.pipe(llm).pipe(new StringOutputParser());
+const answerChain = answerPrompt.pipe(model).pipe(new StringOutputParser());
 
 const chain = RunnableSequence.from([
   {
@@ -48,7 +48,10 @@ const chain = RunnableSequence.from([
   },
   {
     context: retrieverChain,
-    question: ({ original_input }) => original_input.question,
+    question: ({ original_input }) => {
+      console.log("orginal inpuyt is ", original_input);
+      return original_input.question;
+    },
   },
   answerChain,
 ]);

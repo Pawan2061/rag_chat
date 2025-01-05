@@ -9,13 +9,13 @@ console.log(process.env.SUPABASE_URL);
 const embeddings = new OpenAIEmbeddings({ openAIApiKey });
 const sbApiKey: string = process.env.SUPABASE_key || "";
 const sbUrl: string = process.env.SUPABASE_URL || "";
+console.log(openAIApiKey, sbApiKey, sbUrl);
 
 const client = createClient(sbUrl, sbApiKey);
 
 const vectorStore = new SupabaseVectorStore(embeddings, {
   client,
-  tableName: "documents",
-  queryName: "match_documents",
+  tableName: "langchain",
 });
 
 const retriever = vectorStore.asRetriever();

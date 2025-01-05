@@ -1,13 +1,4 @@
 import { ChatOpenAI } from "@langchain/openai";
-import { ChatAnthropic } from "@langchain/anthropic";
-// export const chatModel = new ChatAnthropic({
-//   apiKey: process.env.OPENAI_API_KEY,
-//   model: "claude-3-5-sonnet-20240620",
-// });
-// export const model = new ChatOpenAI({
-//   model: "gpt-4",
-//   apiKey: process.env.OPENAI_API_KEY,
-// });
 
 export const model = new ChatOpenAI({
   model: "gpt-4",

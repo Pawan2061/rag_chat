@@ -5,7 +5,6 @@ import { CSVLoader } from "langchain/document_loaders/fs/csv";
 import { NotionAPILoader } from "langchain/document_loaders/web/notionapi";
 import { NotionAPI } from "notion-client";
 
-// you can optionally pass an authToken to access private notion resources
 const api = new NotionAPI();
 
 import { createClient } from "@supabase/supabase-js";
@@ -13,8 +12,6 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 const sbApiKey: string = process.env.SUPABASE_key || "";
 const sbUrl: string = process.env.SUPABASE_URL || "";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { Document } from "@langchain/core/documents";
 
 const client = createClient(sbUrl, sbApiKey);
 async function loadData() {
@@ -35,15 +32,21 @@ async function loadData() {
 
     const docChunks = await splitter.createDocuments([pageText]);
 
-    const docs = await splitter.splitDocuments(docChunks);
-    await SupabaseVectorStore.fromDocuments(
-      docs,
+    console.log(docChunks, "chunks here");
+
+    // const docs = await splitter.splitDocuments(docChunks);
+
+    const store = await SupabaseVectorStore.fromDocuments(
+      docChunks,
       new OpenAIEmbeddings({ openAIApiKey }),
+
       {
         client,
-        tableName: "langchain",
+        queryName: "match_documents",
+        tableName: "documents",
       }
     );
+
     console.log("succes");
   } catch (error) {
     return error;

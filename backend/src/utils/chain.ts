@@ -21,8 +21,9 @@ const standaloneQuestionPrompt = PromptTemplate.fromTemplate(
   standaloneQuestionTemplate
 );
 
-const answerTemplate: string = `You are a helpful and enthusiastic support bot who can answer a given question based on the context provided  . Try to find the answer in the context and evaluate the context properly and answer  . If you really don't know the answer, say "I'm sorry, I don't know the answer to the question , I'm here to provide information and answer questions related to the context". Don't try to make up an answer. Always speak as if you were chatting to a friend and remeber to answer question like hello politely and other questions like how are you.
-context: {context}
+const answerTemplate: string = ` Try to find the answer in the question and evaluate the context properly and answer  . If you really don't know the answer, say "I'm sorry, I don't know the answer to the question , I'm here to provide information and answer questions related to the ". Don't try to make up an answer. Always speak as if you were chatting to a friend and remeber to answer question like hello politely and other questions like how are you.
+
+
 
 
 question: {question}
@@ -48,8 +49,8 @@ const chain = RunnableSequence.from([
   },
   {
     context: retrieverChain,
+
     question: ({ original_input }) => {
-      console.log("orginal inpuyt is ", original_input);
       return original_input.question;
     },
   },

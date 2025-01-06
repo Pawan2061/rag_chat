@@ -5,6 +5,8 @@ import { NotionAPI } from "notion-client";
 import cors from "cors";
 import { model } from "./utils/model";
 import { loadData } from "./utils/supabase";
+import { NotionAPILoader } from "langchain/document_loaders/web/notionapi";
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 dotenv.config();
 
 const app = express();

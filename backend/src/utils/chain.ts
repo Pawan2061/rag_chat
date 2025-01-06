@@ -11,23 +11,21 @@ import { combineDocs } from "./combine";
 import { model } from "./model";
 import { retriever } from "./retriever";
 
-const openAIApiKey: string = process.env.OPENAI_API_KEY || "";
-
 const standaloneQuestionTemplate = `Given  question, convert the question to a standalone question. 
 
 question: {question} 
 standalone question:`;
+
 const standaloneQuestionPrompt = PromptTemplate.fromTemplate(
   standaloneQuestionTemplate
 );
-
-const answerTemplate: string = ` Try to find the answer in the question and evaluate the context properly and answer  . If you really don't know the answer, say "I'm sorry, I don't know the answer to the question , I'm here to provide information and answer questions related to the ". Don't try to make up an answer. Always speak as if you were chatting to a friend and remeber to answer question like hello politely and other questions like how are you.
-
-
+const answerTemplate: string = `You are a helpful and enthusiastic support bot who can answer a given question based on the context provided  . Try to find the answer in the context and evaluate the context properly and answer  . If you really don't know the answer, say "I'm sorry, I don't know the answer to the question , I'm here to provide information and answer questions related to the context". Don't try to make up an answer. Always speak as if you were chatting to a friend and remeber to answer question like hello politely and other questions like how are you.
+context: {context}
 
 
 question: {question}
 answer: `;
+
 const answerPrompt = PromptTemplate.fromTemplate(answerTemplate);
 
 const standaloneQuestionChain = standaloneQuestionPrompt
@@ -35,12 +33,22 @@ const standaloneQuestionChain = standaloneQuestionPrompt
   .pipe(new StringOutputParser());
 
 const retrieverChain = RunnableSequence.from([
-  (prevResult) => prevResult.standalone_question,
+  (prevResult) => {
+    console.log(prevResult, "prev result here");
+
+    return prevResult.standalone_question;
+  },
   retriever,
   combineDocs,
 ]);
 
-const answerChain = answerPrompt.pipe(model).pipe(new StringOutputParser());
+const answerChain = answerPrompt
+  .pipe(model)
+  .pipe(new StringOutputParser())
+
+  .pipe(async (output) => {
+    return output;
+  });
 
 const chain = RunnableSequence.from([
   {
@@ -51,6 +59,10 @@ const chain = RunnableSequence.from([
     context: retrieverChain,
 
     question: ({ original_input }) => {
+      console.log("efeifjeifjei");
+
+      console.log(original_input, "input heres");
+
       return original_input.question;
     },
   },

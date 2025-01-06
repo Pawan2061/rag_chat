@@ -1,6 +1,14 @@
-export function combineDocs(docs: any[]) {
-  console.log("almost isnide");
-  console.log(docs, "docs here");
+export function combineDocs(docs: any): string {
+  if (!docs || docs.length === 0) {
+    return "No relevant documents found.";
+  }
 
-  return docs.map((doc) => doc.pageContent).join("\n\n");
+  const validDocs = docs.filter((doc: any) => doc && doc.pageContent);
+  console.log(validDocs, "valid ones");
+
+  if (validDocs.length === 0) {
+    return "No valid document content found.";
+  }
+
+  return validDocs.map((doc: any) => doc.pageContent).join("\n\n");
 }

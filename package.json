@@ -1,9 +1,0 @@
-{
-	"dependencies": {
-		"@langchain/anthropic": "^0.3.11",
-		"@langchain/community": "^0.3.22",
-		"@langchain/core": "^0.3.27",
-		"@notionhq/client": "^2.2.15",
-		"notion-to-md": "^3.1.1"
-	}
-}

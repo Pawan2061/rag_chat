@@ -47,6 +47,8 @@ const answerChain = answerPrompt
   .pipe(new StringOutputParser())
 
   .pipe(async (output) => {
+    console.log(output, "output here");
+
     return output;
   });
 
@@ -59,9 +61,7 @@ const chain = RunnableSequence.from([
     context: retrieverChain,
 
     question: ({ original_input }) => {
-      console.log("efeifjeifjei");
-
-      console.log(original_input, "input heres");
+      console.log(original_input.question);
 
       return original_input.question;
     },

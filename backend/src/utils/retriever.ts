@@ -23,7 +23,6 @@ const retriever = vectorStore.asRetriever({
   callbacks: [
     {
       handleRetrieverEnd: (documents: any[]) => {
-        console.log("retreieved documents", documents);
         return documents.map((doc) => ({
           pageContent: doc.content,
           metadata: doc.metadata,

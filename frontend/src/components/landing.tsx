@@ -1,3 +1,9 @@
+import { Features } from "./ui/feature";
+
 export default function Home() {
-  return <div>home</div>;
+  return (
+    <div>
+      <Features />
+    </div>
+  );
 }

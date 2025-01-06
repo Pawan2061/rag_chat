@@ -1,5 +1,30 @@
 import { chain } from "../utils/chain";
 import { Request, Response } from "express";
+import { loadData } from "../utils/supabase";
+
+const loadNotion = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        message: "notionid not found",
+      });
+    }
+    const response = await loadData();
+    if (!response) {
+      return res.status(400).json({
+        message: "error loading the data",
+      });
+    }
+    return res.status(200).json({
+      message: "loaded successfully",
+    });
+  } catch (error) {
+    return res.status(400).json({
+      error: error,
+    });
+  }
+};
 const askQuestion = async (req: Request, res: Response): Promise<any> => {
   try {
     const { question } = req.body;

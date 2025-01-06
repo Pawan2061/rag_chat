@@ -1,6 +1,5 @@
 // import MobileNavbarDrawer from "./mobile-nav";
-import { buttonVariants } from "./ui/button";
-import { BookIcon, UserIcon } from "lucide-react";
+import { UserIcon } from "lucide-react";
 import NavItems from "./ui/navitems";
 import { ModeToggle } from "./toggle";
 // import { NavItems } from "./nav-icons";

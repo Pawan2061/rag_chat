@@ -82,8 +82,9 @@ async function loadData() {
     const client = createClient(sbUrl, sbApiKey);
 
     const openAIApiKey = process.env.OPENAI_API_KEY;
+    // c66d5236e8ea40df8af114f6d447ab48
 
-    const page = await api.getPage("c66d5236e8ea40df8af114f6d447ab48");
+    const page = await api.getPage("172205a1f6538033ae9fdd6fc5f7e92c");
 
     const pageContent = JSON.stringify(page, null, 2);
 
@@ -94,7 +95,7 @@ async function loadData() {
 
     const docs = await splitter.createDocuments(
       [pageContent],
-      [{ source: "notion", pageId: "c66d5236e8ea40df8af114f6d447ab48" }]
+      [{ source: "notion", pageId: "172205a1f6538033ae9fdd6fc5f7e92c" }]
     );
 
     const store = await SupabaseVectorStore.fromDocuments(
@@ -102,8 +103,8 @@ async function loadData() {
       new OpenAIEmbeddings({ openAIApiKey }),
       {
         client,
-        tableName: "documents",
-        queryName: "match_documents_v2",
+        tableName: "documents1",
+        queryName: "match_documents_v3",
       }
     );
 

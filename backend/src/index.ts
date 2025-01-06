@@ -16,7 +16,6 @@ const api = new NotionAPI();
 
 app.use(express.json());
 app.use("/api/v1", router);
-
 const PORT = process.env.PORT ? process.env.PORT : 3000;
 async function main() {
   try {
@@ -26,7 +25,7 @@ async function main() {
   }
 }
 
-// main();
+main();
 
 app.listen(PORT, () => {
   console.log(`workign on port ${PORT}`);

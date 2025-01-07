@@ -1,5 +1,5 @@
 interface IChat {
-  content: string;
+  content: any;
   author: "bot" | "human";
   image: string;
   firstName: string;
@@ -8,6 +8,10 @@ interface IChat {
 const BOT_IMAGE = "https://avatars.githubusercontent.com/ml/14048?s=82&v=4";
 
 export const SingleChat = ({ author, content, image, firstName }: IChat) => {
+  console.log(author, "author here");
+
+  console.log(content, "author here");
+
   return (
     <div
       className="flex items-center gap-2 justify-end"
@@ -20,7 +24,7 @@ export const SingleChat = ({ author, content, image, firstName }: IChat) => {
         <span className="font-bold underline">
           {author === "bot" ? "AI" : firstName}
         </span>
-        <p className="text-sm leading-snug">{content}</p>
+        <p className="text-sm leading-snug">{content.data}</p>
       </div>
       <img
         alt="Avatar"

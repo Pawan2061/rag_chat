@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Loader2, Send, MessageCircle } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
 import { SingleChat } from "./ui/singlechat";
 import { Filter } from "bad-words";
 import {
@@ -16,11 +17,12 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog";
 import { BotThinking } from "./ui/bot";
+import { useMutation } from "@tanstack/react-query";
 
 const filter = new Filter();
 
 interface IMessage {
-  content: string;
+  content: any;
   author: "bot" | "human";
 }
 
@@ -36,34 +38,42 @@ export function Chat() {
     },
   ]);
 
-  const handleClick = async () => {
-    if (!query) return;
-    setGenerating(true);
-    setMessages((prev) => [
-      ...prev,
-      {
-        author: "human",
-        content: filter.clean(query),
-      },
-    ]);
+  const mutation = useMutation({
+    mutationFn: async (question: string) => {
+      console.log("inside mutation");
 
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ question: query }),
-    };
+      const { data } = await axios.post("http://localhost:3000/api/v1/ask", {
+        question,
+      });
+      console.log(data, "data heres");
 
-    try {
-      const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL!, options);
-      const { data } = await res.json();
+      return data;
+    },
+    onMutate: () => {
+      setGenerating(true);
+      setMessages((prev) => [
+        ...prev,
+        {
+          author: "human",
+          content: filter.clean(query),
+        },
+      ]);
+    },
+    onSuccess: (data) => {
       setMessages((prev) => [...prev, { author: "bot", content: data }]);
+      console.log(messages, "first");
+
       setGenerating(false);
       setQuery("");
-    } catch (e) {
-      console.log(e);
-    }
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+      setGenerating(false);
+    },
+  });
+  const handleClick = () => {
+    if (!query.trim()) return;
+    mutation.mutate(query);
   };
 
   if (!dialogueClosed)

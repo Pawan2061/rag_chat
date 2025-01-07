@@ -1,5 +1,3 @@
-import React from "react";
-
 const GridBackground = () => {
   const cellSize = 40;
   const strokeColor = "#7f69ce";

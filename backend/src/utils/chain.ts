@@ -19,12 +19,16 @@ standalone question:`;
 const standaloneQuestionPrompt = PromptTemplate.fromTemplate(
   standaloneQuestionTemplate
 );
-const answerTemplate: string = `You are a helpful and enthusiastic support bot who can answer a given question based on the context provided  . Try to find the answer in the context and evaluate the context properly and answer  . If you really don't know the answer, say "I'm sorry, I don't know the answer to the question , I'm here to provide information and answer questions related to the context". Don't try to make up an answer. Always speak as if you were chatting to a friend and remeber to answer question like hello politely and other questions like how are you.
+const answerTemplate: string = `Use the following pieces of context to answer the question. 
+If you don't know or can't find the answer in the context try to match the word from the llm itself without the context ,and only say explicitly if the context is wholly outside the data provided.
+
 context: {context}
 
 
-question: {question}
-answer: `;
+Question: {question}
+Provide your answer with relevant details from the context. Include specific references 
+where possible. If multiple pieces of context contain relevant information, synthesize them.
+Answer:""" `;
 
 const answerPrompt = PromptTemplate.fromTemplate(answerTemplate);
 
@@ -38,7 +42,12 @@ const retrieverChain = RunnableSequence.from([
 
     return prevResult.standalone_question;
   },
-  retriever,
+  async (standalone_question) => {
+    const retrievedDocs = await retriever.invoke(standalone_question);
+    console.log(retrievedDocs, "retrieved docs here");
+    return retrievedDocs;
+  },
+
   combineDocs,
 ]);
 
@@ -61,8 +70,6 @@ const chain = RunnableSequence.from([
     context: retrieverChain,
 
     question: ({ original_input }) => {
-      console.log(original_input.question);
-
       return original_input.question;
     },
   },

@@ -89,8 +89,9 @@ async function loadData() {
     const pageContent = JSON.stringify(page, null, 2);
 
     const splitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1000,
-      chunkOverlap: 200,
+      chunkSize: 500,
+      chunkOverlap: 100,
+      separators: ["\n\n", "\n", ".", "!", "?", " ", ""],
     });
 
     const docs = await splitter.createDocuments(

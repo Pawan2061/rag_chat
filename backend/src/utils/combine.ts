@@ -8,7 +8,6 @@ export function combineDocs(docs: any): string {
   if (validDocs.length === 0) {
     return "No valid document content found.";
   }
-  console.log(validDocs, "valids");
 
   return validDocs.map((doc: any) => doc.pageContent).join("\n\n");
 }

@@ -40,12 +40,9 @@ export function Chat() {
 
   const mutation = useMutation({
     mutationFn: async (question: string) => {
-      console.log("inside mutation");
-
       const { data } = await axios.post("http://localhost:3000/api/v1/ask", {
         question,
       });
-      console.log(data, "data heres");
 
       return data;
     },
@@ -61,7 +58,6 @@ export function Chat() {
     },
     onSuccess: (data) => {
       setMessages((prev) => [...prev, { author: "bot", content: data }]);
-      console.log(messages, "first");
 
       setGenerating(false);
       setQuery("");
@@ -133,6 +129,7 @@ export function Chat() {
                   key={i}
                 />
               ))}
+
               {generating && <BotThinking />}
             </div>
           </div>

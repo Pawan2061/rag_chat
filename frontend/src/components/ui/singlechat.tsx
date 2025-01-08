@@ -8,8 +8,6 @@ interface IChat {
 const BOT_IMAGE = "https://avatars.githubusercontent.com/ml/14048?s=82&v=4";
 
 export const SingleChat = ({ author, content, image, firstName }: IChat) => {
-  console.log(author, "author here");
-
   console.log(content, "author here");
 
   return (
@@ -26,6 +24,7 @@ export const SingleChat = ({ author, content, image, firstName }: IChat) => {
         </span>
         <p className="text-sm leading-snug">{content.data}</p>
       </div>
+
       <img
         alt="Avatar"
         className="rounded-full h-10 w-10 bg-white"

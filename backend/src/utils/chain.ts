@@ -19,16 +19,19 @@ standalone question:`;
 const standaloneQuestionPrompt = PromptTemplate.fromTemplate(
   standaloneQuestionTemplate
 );
-const answerTemplate: string = `Use the following pieces of context to answer the question. 
-If you don't know or can't find the answer in the context try to match the word from the llm itself without the context ,and only say explicitly if the context is wholly outside the data provided.
+const answerTemplate: string = `You are an AI assistant that provides direct, concise, and well-structured answers.  
 
-context: {context}
+Use the given context to generate an accurate response. If the context lacks relevant details, generate a well-informed answer using your own knowledge without explicitly stating that the context is insufficient.  
 
+Provide a structured response that directly answers the question, avoiding unnecessary introductions or disclaimers.  
 
-Question: {question}
-Provide your answer with relevant details from the context. Include specific references 
-where possible. If multiple pieces of context contain relevant information, synthesize them.
-Answer:""" `;
+### Context:  
+{context}  
+
+### Question:  
+{question}  
+
+### Answer:  `;
 
 const answerPrompt = PromptTemplate.fromTemplate(answerTemplate);
 
@@ -38,13 +41,10 @@ const standaloneQuestionChain = standaloneQuestionPrompt
 
 const retrieverChain = RunnableSequence.from([
   (prevResult) => {
-    console.log(prevResult, "prev result here");
-
     return prevResult.standalone_question;
   },
   async (standalone_question) => {
     const retrievedDocs = await retriever.invoke(standalone_question);
-    console.log(retrievedDocs, "retrieved docs here");
     return retrievedDocs;
   },
 
@@ -56,8 +56,6 @@ const answerChain = answerPrompt
   .pipe(new StringOutputParser())
 
   .pipe(async (output) => {
-    console.log(output, "output here");
-
     return output;
   });
 

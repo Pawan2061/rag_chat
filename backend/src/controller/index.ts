@@ -37,8 +37,6 @@ const askQuestion = async (req: Request, res: Response): Promise<any> => {
     const response = await chain.invoke({
       question,
     });
-    console.log(response.length);
-    console.log(response[0]);
 
     return res.status(200).json({ data: response });
   } catch (error) {

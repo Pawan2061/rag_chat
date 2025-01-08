@@ -25,7 +25,7 @@ async function main() {
   }
 }
 
-main();
+// main();
 
 app.listen(PORT, () => {
   console.log(`workign on port ${PORT}`);

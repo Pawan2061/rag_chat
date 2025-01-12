@@ -1,3 +1,5 @@
+import React from "react";
+
 interface IChat {
   content: any;
   author: "bot" | "human";
@@ -8,34 +10,43 @@ interface IChat {
 const BOT_IMAGE = "https://avatars.githubusercontent.com/ml/14048?s=82&v=4";
 
 export const SingleChat = ({ author, content, image, firstName }: IChat) => {
-  console.log(content, "author here");
+  const messageContent =
+    typeof content === "object" && content.data ? content.data : content;
 
   return (
     <div
-      className="flex items-center gap-2 justify-end"
+      className="flex items-start gap-3 mb-4"
       style={{
         justifyContent: author === "bot" ? "start" : "end",
-        flexDirection: author === "human" ? "row" : "row-reverse",
+        flexDirection: author === "human" ? "row-reverse" : "row",
       }}
     >
-      <div className="bg-gray-100 rounded-xl px-4 py-2 dark:bg-gray-800">
-        <span className="font-bold underline">
-          {author === "bot" ? "AI" : firstName}
-        </span>
-        <p className="text-sm leading-snug">{content.data}</p>
-      </div>
-
       <img
-        alt="Avatar"
-        className="rounded-full h-10 w-10 bg-white"
-        height="40"
+        alt={`${author === "bot" ? "AI" : firstName} Avatar`}
+        className="rounded-full h-8 w-8 bg-white flex-shrink-0"
         src={author === "bot" ? BOT_IMAGE : image}
         style={{
-          aspectRatio: "40/40",
+          aspectRatio: "1",
           objectFit: "cover",
         }}
-        width="40"
       />
+
+      <div
+        className={`max-w-[80%] rounded-lg px-4 py-2 ${
+          author === "bot"
+            ? "bg-gray-100 dark:bg-gray-800"
+            : "bg-blue-500 dark:bg-blue-600 text-white"
+        }`}
+      >
+        <span className="text-xs font-semibold block mb-1">
+          {author === "bot" ? "AI" : firstName}
+        </span>
+        <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+          {messageContent}
+        </p>
+      </div>
     </div>
   );
 };
+
+export default SingleChat;

@@ -48,15 +48,20 @@ export function Chat() {
     },
     onMutate: () => {
       setGenerating(true);
-      setMessages((prev) => [
-        ...prev,
-        {
-          author: "human",
-          content: filter.clean(query),
-        },
-      ]);
+      setMessages((prev) => {
+        console.log("got message from human ", query);
+        return [
+          ...prev,
+          {
+            author: "human",
+            content: filter.clean(query),
+          },
+        ];
+      });
     },
     onSuccess: (data) => {
+      console.log(data);
+
       setMessages((prev) => [...prev, { author: "bot", content: data }]);
 
       setGenerating(false);
@@ -121,14 +126,17 @@ export function Chat() {
         >
           <div className="container px-4 py-6 mx-auto flex flex-col gap-4">
             <div className="space-y-4">
-              {messages.map((msg, i) => (
-                <SingleChat
-                  {...msg}
-                  image="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-                  firstName="pawan"
-                  key={i}
-                />
-              ))}
+              {messages.map((msg, i) => {
+                console.log("message is ", msg);
+                return (
+                  <SingleChat
+                    {...msg}
+                    image="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
+                    firstName="pawan"
+                    key={i}
+                  />
+                );
+              })}
 
               {generating && <BotThinking />}
             </div>

@@ -22,7 +22,7 @@ export const SingleChat = ({ author, content, image, firstName }: IChat) => {
         <span className="font-bold underline">
           {author === "bot" ? "AI" : firstName}
         </span>
-        <p className="text-sm leading-snug">{content.data}</p>
+        <p className="text-sm leading-snug">{content}</p>
       </div>
 
       <img
